@@ -1,6 +1,7 @@
-from flask.templating import render_template
+from flask import render_template, request, redirect, url_for 
 from application import app, db
 from application.models import Tasks
+from application.forms import TaskForm
 
 @app.route('/')
 def home():
@@ -9,11 +10,15 @@ def home():
 
 
 
-@app.route('/create_task')
+@app.route('/create_task', methods=["GET","POST"])
 def create_task():
-    new_task = Tasks(description="New Task")
-    db.session.add(new_task)
-    db.session.commit()
+    form = TaskForm()
+
+    if request.method == "POST":
+        new_task = Tasks(description=form.description.data) 
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for("home"))
     
 
-    return f"Task added with ID {new_task.id}"
+    return render_template("create_task.html", title="Add a task", form=form)
