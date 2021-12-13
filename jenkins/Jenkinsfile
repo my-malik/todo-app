@@ -20,9 +20,7 @@ pipeline {
             steps {
                 script{
                     if(env.CREATE_SCHEMA == "true" ) {
-                        sh 'echo "creating schema.."'
-                        sh "python3 create.py"    
-                        sh 'echo "schema created!"'
+                        sh "bash jenkins/create_schema.sh"
                     }
                     
                 }
@@ -33,7 +31,7 @@ pipeline {
             steps {
                 script{
                     if(env.RUN_APP== "true" ) {
-                        sh "python3 app.py"    
+                        sh "bash jenkins/run_app.py"    
                     }
                     
                 }
